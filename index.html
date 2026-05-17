@@ -1,0 +1,842 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>RU-Apps — Российские приложения для всех устройств</title>
+  <meta name="description" content="Скачивайте лучшие российские приложения бесплатно. Гос. сервисы, банки, карты, мессенджеры и многое другое." />
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link href="https://fonts.googleapis.com/css2?family=Unbounded:wght@400;700;900&family=Golos+Text:wght@400;500;600&display=swap" rel="stylesheet" />
+  <style>
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+    :root {
+      --red: #D62B2B;
+      --red-dark: #A01E1E;
+      --red-light: #FF4444;
+      --blue: #003F87;
+      --blue-mid: #1A5EBF;
+      --gold: #E8C94A;
+      --bg: #0B0D14;
+      --surface: #13162A;
+      --surface2: #1C2040;
+      --border: rgba(255,255,255,0.07);
+      --text: #F0F2FF;
+      --muted: #8A90B8;
+      --card-bg: linear-gradient(145deg, #161929, #0F1220);
+    }
+
+    html { scroll-behavior: smooth; }
+
+    body {
+      background: var(--bg);
+      color: var(--text);
+      font-family: 'Golos Text', sans-serif;
+      font-size: 16px;
+      line-height: 1.6;
+      overflow-x: hidden;
+    }
+
+    /* ── NOISE TEXTURE OVERLAY ── */
+    body::before {
+      content: '';
+      position: fixed; inset: 0;
+      background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 200 200' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)' opacity='0.04'/%3E%3C/svg%3E");
+      pointer-events: none; z-index: 999;
+    }
+
+    /* ── NAV ── */
+    nav {
+      position: sticky; top: 0; z-index: 100;
+      display: flex; align-items: center; justify-content: space-between;
+      padding: 0 40px;
+      height: 64px;
+      background: rgba(11,13,20,0.85);
+      backdrop-filter: blur(16px);
+      border-bottom: 1px solid var(--border);
+    }
+
+    .logo {
+      display: flex; align-items: center; gap: 10px;
+      text-decoration: none;
+    }
+    .logo-icon {
+      width: 38px; height: 38px; border-radius: 10px;
+      background: linear-gradient(135deg, var(--red), var(--blue));
+      display: flex; align-items: center; justify-content: center;
+      font-family: 'Unbounded', sans-serif;
+      font-weight: 900; font-size: 14px; color: #fff;
+      box-shadow: 0 0 20px rgba(214,43,43,0.4);
+    }
+    .logo-text {
+      font-family: 'Unbounded', sans-serif;
+      font-weight: 700; font-size: 18px; color: var(--text);
+      letter-spacing: -0.5px;
+    }
+    .logo-text span { color: var(--red); }
+
+    .nav-links {
+      display: flex; gap: 32px; list-style: none;
+    }
+    .nav-links a {
+      color: var(--muted); text-decoration: none;
+      font-size: 14px; font-weight: 500;
+      transition: color 0.2s;
+    }
+    .nav-links a:hover { color: var(--text); }
+
+    .nav-cta {
+      background: var(--red);
+      color: #fff; font-weight: 600; font-size: 13px;
+      padding: 9px 22px; border-radius: 8px;
+      text-decoration: none;
+      transition: background 0.2s, transform 0.15s;
+    }
+    .nav-cta:hover { background: var(--red-light); transform: translateY(-1px); }
+
+    /* ── HERO ── */
+    .hero {
+      position: relative;
+      min-height: 88vh;
+      display: flex; align-items: center;
+      padding: 80px 40px;
+      overflow: hidden;
+    }
+
+    /* Russian flag stripe accents */
+    .hero::after {
+      content: '';
+      position: absolute; top: 0; right: 0;
+      width: 4px; height: 100%;
+      background: linear-gradient(to bottom, #fff 33%, var(--blue) 33%, var(--blue) 66%, var(--red) 66%);
+      opacity: 0.4;
+    }
+
+    .hero-glow {
+      position: absolute; top: -200px; right: -200px;
+      width: 700px; height: 700px; border-radius: 50%;
+      background: radial-gradient(circle, rgba(214,43,43,0.15) 0%, rgba(0,63,135,0.08) 50%, transparent 70%);
+      pointer-events: none;
+    }
+    .hero-glow2 {
+      position: absolute; bottom: -300px; left: -100px;
+      width: 600px; height: 600px; border-radius: 50%;
+      background: radial-gradient(circle, rgba(0,63,135,0.12) 0%, transparent 70%);
+      pointer-events: none;
+    }
+
+    .hero-inner {
+      max-width: 680px;
+      animation: fadeUp 0.9s ease both;
+    }
+
+    .hero-badge {
+      display: inline-flex; align-items: center; gap: 8px;
+      background: rgba(214,43,43,0.12); border: 1px solid rgba(214,43,43,0.3);
+      color: #FF6B6B; font-size: 12px; font-weight: 600;
+      padding: 6px 14px; border-radius: 100px;
+      margin-bottom: 28px; text-transform: uppercase; letter-spacing: 0.8px;
+    }
+    .hero-badge::before {
+      content: ''; width: 6px; height: 6px; border-radius: 50%;
+      background: var(--red-light);
+      box-shadow: 0 0 6px var(--red-light);
+      animation: pulse 2s infinite;
+    }
+
+    .hero h1 {
+      font-family: 'Unbounded', sans-serif;
+      font-size: clamp(36px, 5.5vw, 68px);
+      font-weight: 900;
+      line-height: 1.08;
+      letter-spacing: -2px;
+      margin-bottom: 24px;
+    }
+    .hero h1 em {
+      font-style: normal;
+      background: linear-gradient(90deg, var(--red-light), var(--gold));
+      -webkit-background-clip: text; -webkit-text-fill-color: transparent;
+      background-clip: text;
+    }
+
+    .hero p {
+      font-size: 18px; color: var(--muted);
+      max-width: 520px; margin-bottom: 40px; line-height: 1.7;
+    }
+
+    .hero-actions {
+      display: flex; gap: 16px; flex-wrap: wrap;
+    }
+
+    .btn-primary {
+      display: inline-flex; align-items: center; gap: 10px;
+      background: var(--red);
+      color: #fff; font-weight: 700; font-size: 15px;
+      padding: 15px 32px; border-radius: 12px;
+      text-decoration: none;
+      box-shadow: 0 8px 32px rgba(214,43,43,0.35);
+      transition: all 0.2s;
+    }
+    .btn-primary:hover { background: var(--red-light); transform: translateY(-2px); box-shadow: 0 12px 40px rgba(214,43,43,0.45); }
+
+    .btn-secondary {
+      display: inline-flex; align-items: center; gap: 10px;
+      background: var(--surface2); border: 1px solid var(--border);
+      color: var(--text); font-weight: 600; font-size: 15px;
+      padding: 15px 32px; border-radius: 12px;
+      text-decoration: none;
+      transition: all 0.2s;
+    }
+    .btn-secondary:hover { background: var(--surface); border-color: rgba(255,255,255,0.15); }
+
+    /* ── STATS ── */
+    .stats {
+      display: flex; gap: 48px; flex-wrap: wrap;
+      padding: 40px 40px;
+      border-top: 1px solid var(--border);
+      border-bottom: 1px solid var(--border);
+      background: var(--surface);
+      animation: fadeUp 1s 0.2s ease both;
+    }
+    .stat { display: flex; flex-direction: column; gap: 4px; }
+    .stat-num {
+      font-family: 'Unbounded', sans-serif;
+      font-size: 32px; font-weight: 900; color: var(--text);
+    }
+    .stat-num span { color: var(--red); }
+    .stat-label { font-size: 13px; color: var(--muted); }
+
+    /* ── SECTION HEADER ── */
+    .section { padding: 80px 40px; }
+    .section-header { margin-bottom: 48px; }
+    .section-tag {
+      display: inline-block;
+      font-size: 11px; font-weight: 700; letter-spacing: 1.5px;
+      text-transform: uppercase; color: var(--red);
+      margin-bottom: 12px;
+    }
+    .section-header h2 {
+      font-family: 'Unbounded', sans-serif;
+      font-size: clamp(26px, 3.5vw, 42px);
+      font-weight: 800; letter-spacing: -1px;
+      line-height: 1.1;
+    }
+    .section-header p { color: var(--muted); margin-top: 12px; font-size: 16px; max-width: 560px; }
+
+    /* ── CATEGORIES ── */
+    .categories-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fill, minmax(180px, 1fr));
+      gap: 16px;
+    }
+
+    .cat-card {
+      background: var(--card-bg);
+      border: 1px solid var(--border);
+      border-radius: 16px;
+      padding: 28px 20px;
+      text-align: center;
+      cursor: pointer;
+      text-decoration: none;
+      transition: all 0.25s;
+      position: relative; overflow: hidden;
+    }
+    .cat-card::before {
+      content: '';
+      position: absolute; inset: 0;
+      background: linear-gradient(135deg, rgba(214,43,43,0.06), transparent);
+      opacity: 0; transition: opacity 0.25s;
+    }
+    .cat-card:hover { border-color: rgba(214,43,43,0.35); transform: translateY(-4px); box-shadow: 0 16px 40px rgba(0,0,0,0.3); }
+    .cat-card:hover::before { opacity: 1; }
+
+    .cat-icon { font-size: 36px; margin-bottom: 12px; display: block; }
+    .cat-name { font-weight: 600; font-size: 14px; color: var(--text); }
+    .cat-count { font-size: 12px; color: var(--muted); margin-top: 4px; }
+
+    /* ── APP CARDS ── */
+    .apps-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+      gap: 20px;
+    }
+
+    .app-card {
+      background: var(--card-bg);
+      border: 1px solid var(--border);
+      border-radius: 20px;
+      padding: 24px;
+      display: flex; flex-direction: column; gap: 16px;
+      transition: all 0.25s;
+      position: relative; overflow: hidden;
+    }
+    .app-card::after {
+      content: '';
+      position: absolute; top: 0; left: 0; right: 0;
+      height: 2px;
+      background: linear-gradient(90deg, var(--red), var(--blue-mid));
+      opacity: 0; transition: opacity 0.3s;
+    }
+    .app-card:hover { border-color: rgba(255,255,255,0.12); transform: translateY(-3px); box-shadow: 0 20px 50px rgba(0,0,0,0.4); }
+    .app-card:hover::after { opacity: 1; }
+
+    .app-header { display: flex; align-items: center; gap: 14px; }
+
+    .app-icon {
+      width: 56px; height: 56px; border-radius: 14px;
+      display: flex; align-items: center; justify-content: center;
+      font-size: 26px; flex-shrink: 0;
+      box-shadow: 0 4px 16px rgba(0,0,0,0.3);
+    }
+
+    .app-meta { flex: 1; min-width: 0; }
+    .app-name { font-weight: 700; font-size: 16px; color: var(--text); }
+    .app-developer { font-size: 12px; color: var(--muted); margin-top: 2px; }
+
+    .app-badge {
+      font-size: 10px; font-weight: 700; letter-spacing: 0.5px;
+      padding: 3px 8px; border-radius: 6px;
+      background: rgba(232,201,74,0.15); color: var(--gold);
+      border: 1px solid rgba(232,201,74,0.25);
+    }
+
+    .app-desc { font-size: 13px; color: var(--muted); line-height: 1.6; }
+
+    .app-footer { display: flex; align-items: center; justify-content: space-between; }
+
+    .app-rating {
+      display: flex; align-items: center; gap: 4px;
+      font-size: 13px; color: var(--gold); font-weight: 600;
+    }
+
+    .btn-download {
+      display: inline-flex; align-items: center; gap: 8px;
+      background: rgba(214,43,43,0.15); border: 1px solid rgba(214,43,43,0.3);
+      color: #FF6B6B; font-size: 13px; font-weight: 700;
+      padding: 9px 18px; border-radius: 10px;
+      text-decoration: none; cursor: pointer;
+      transition: all 0.2s;
+    }
+    .btn-download:hover { background: var(--red); color: #fff; border-color: var(--red); }
+
+    /* ── SEARCH ── */
+    .search-wrap {
+      background: var(--surface);
+      border-top: 1px solid var(--border);
+      border-bottom: 1px solid var(--border);
+      padding: 48px 40px;
+    }
+    .search-box {
+      max-width: 640px; margin: 0 auto;
+      display: flex; gap: 0;
+      background: var(--surface2);
+      border: 1px solid var(--border);
+      border-radius: 14px; overflow: hidden;
+      transition: border-color 0.2s;
+    }
+    .search-box:focus-within { border-color: rgba(214,43,43,0.5); }
+    .search-input {
+      flex: 1; padding: 16px 20px;
+      background: transparent; border: none; outline: none;
+      color: var(--text); font-size: 15px; font-family: 'Golos Text', sans-serif;
+    }
+    .search-input::placeholder { color: var(--muted); }
+    .search-btn {
+      padding: 14px 28px;
+      background: var(--red); border: none; color: #fff;
+      font-weight: 700; font-size: 14px; cursor: pointer;
+      font-family: 'Golos Text', sans-serif;
+      transition: background 0.2s;
+    }
+    .search-btn:hover { background: var(--red-light); }
+    .search-tags { display: flex; gap: 8px; flex-wrap: wrap; margin-top: 16px; max-width: 640px; margin-left: auto; margin-right: auto; }
+    .search-tag {
+      font-size: 12px; padding: 5px 12px; border-radius: 100px;
+      background: var(--surface2); border: 1px solid var(--border);
+      color: var(--muted); cursor: pointer; transition: all 0.2s;
+    }
+    .search-tag:hover { color: var(--text); border-color: rgba(255,255,255,0.15); }
+
+    /* ── PLATFORMS ── */
+    .platforms {
+      background: var(--surface);
+      border-top: 1px solid var(--border);
+    }
+    .platforms-inner { display: grid; grid-template-columns: 1fr 1fr; gap: 0; }
+    .platform-block {
+      padding: 64px 40px;
+      border-right: 1px solid var(--border);
+      position: relative; overflow: hidden;
+    }
+    .platform-block:last-child { border-right: none; }
+    .platform-icon { font-size: 48px; margin-bottom: 20px; display: block; }
+    .platform-name {
+      font-family: 'Unbounded', sans-serif;
+      font-weight: 800; font-size: 22px; margin-bottom: 10px;
+    }
+    .platform-desc { color: var(--muted); font-size: 14px; max-width: 340px; line-height: 1.7; }
+    .platform-btn {
+      display: inline-flex; align-items: center; gap: 8px;
+      margin-top: 24px; padding: 12px 24px; border-radius: 10px;
+      font-weight: 700; font-size: 14px; text-decoration: none;
+      border: 1px solid var(--border); color: var(--text);
+      background: var(--surface2); transition: all 0.2s;
+    }
+    .platform-btn:hover { border-color: rgba(255,255,255,0.2); background: var(--bg); }
+
+    /* ── FEATURES ── */
+    .features-grid {
+      display: grid; grid-template-columns: repeat(3, 1fr); gap: 24px;
+    }
+    .feature {
+      padding: 32px; background: var(--card-bg);
+      border: 1px solid var(--border); border-radius: 20px;
+    }
+    .feature-icon {
+      width: 48px; height: 48px; border-radius: 12px;
+      display: flex; align-items: center; justify-content: center;
+      font-size: 22px; margin-bottom: 20px;
+      background: rgba(214,43,43,0.1); border: 1px solid rgba(214,43,43,0.2);
+    }
+    .feature h3 { font-weight: 700; font-size: 17px; margin-bottom: 8px; }
+    .feature p { font-size: 14px; color: var(--muted); line-height: 1.7; }
+
+    /* ── FOOTER ── */
+    footer {
+      background: var(--surface);
+      border-top: 1px solid var(--border);
+      padding: 48px 40px 32px;
+    }
+    .footer-top { display: flex; gap: 48px; margin-bottom: 40px; flex-wrap: wrap; }
+    .footer-brand { flex: 1.5; min-width: 220px; }
+    .footer-brand p { color: var(--muted); font-size: 14px; margin-top: 12px; max-width: 280px; line-height: 1.7; }
+
+    .footer-col { flex: 1; min-width: 140px; }
+    .footer-col h4 { font-weight: 700; font-size: 13px; color: var(--text); margin-bottom: 16px; }
+    .footer-col ul { list-style: none; display: flex; flex-direction: column; gap: 10px; }
+    .footer-col ul a { color: var(--muted); text-decoration: none; font-size: 13px; transition: color 0.2s; }
+    .footer-col ul a:hover { color: var(--text); }
+
+    .footer-bottom {
+      display: flex; align-items: center; justify-content: space-between;
+      padding-top: 24px; border-top: 1px solid var(--border);
+      flex-wrap: wrap; gap: 12px;
+    }
+    .footer-bottom p { font-size: 13px; color: var(--muted); }
+    .russia-flag { display: inline-flex; gap: 4px; align-items: center; }
+    .flag-stripe {
+      width: 18px; height: 10px; border-radius: 2px;
+    }
+
+    /* ── ANIMATIONS ── */
+    @keyframes fadeUp {
+      from { opacity: 0; transform: translateY(28px); }
+      to { opacity: 1; transform: translateY(0); }
+    }
+    @keyframes pulse {
+      0%, 100% { opacity: 1; } 50% { opacity: 0.3; }
+    }
+
+    /* ── RESPONSIVE ── */
+    @media (max-width: 900px) {
+      nav { padding: 0 20px; }
+      .nav-links { display: none; }
+      .hero { padding: 60px 20px; }
+      .stats { padding: 32px 20px; gap: 28px; }
+      .section { padding: 56px 20px; }
+      .search-wrap { padding: 40px 20px; }
+      .features-grid { grid-template-columns: 1fr; }
+      .platforms-inner { grid-template-columns: 1fr; }
+      .platform-block { border-right: none; border-bottom: 1px solid var(--border); padding: 40px 20px; }
+      footer { padding: 40px 20px 24px; }
+    }
+    @media (max-width: 600px) {
+      .hero h1 { letter-spacing: -1px; }
+      .hero-actions { flex-direction: column; }
+      .btn-primary, .btn-secondary { justify-content: center; }
+      .stat-num { font-size: 24px; }
+    }
+  </style>
+</head>
+<body>
+
+<!-- NAV -->
+<nav>
+  <a href="#" class="logo">
+    <div class="logo-icon">RU</div>
+    <span class="logo-text">ru<span>-</span>apps</span>
+  </a>
+  <ul class="nav-links">
+    <li><a href="#catalog">Каталог</a></li>
+    <li><a href="#categories">Категории</a></li>
+    <li><a href="#platforms">Платформы</a></li>
+    <li><a href="#about">О нас</a></li>
+  </ul>
+  <a href="#catalog" class="nav-cta">Скачать приложение</a>
+</nav>
+
+<!-- HERO -->
+<section class="hero">
+  <div class="hero-glow"></div>
+  <div class="hero-glow2"></div>
+  <div class="hero-inner">
+    <div class="hero-badge">Российский каталог приложений</div>
+    <h1>Все нужные<br/>приложения — <em>здесь</em></h1>
+    <p>Скачивайте российские приложения напрямую: госсервисы, банки, карты, мессенджеры и сотни других — без ограничений и посредников.</p>
+    <div class="hero-actions">
+      <a href="#catalog" class="btn-primary">
+        <span>📦</span> Перейти в каталог
+      </a>
+      <a href="#categories" class="btn-secondary">
+        <span>🗂</span> Категории
+      </a>
+    </div>
+  </div>
+</section>
+
+<!-- STATS -->
+<div class="stats">
+  <div class="stat">
+    <span class="stat-num">500<span>+</span></span>
+    <span class="stat-label">Приложений в каталоге</span>
+  </div>
+  <div class="stat">
+    <span class="stat-num">100<span>%</span></span>
+    <span class="stat-label">Проверенные APK / IPA</span>
+  </div>
+  <div class="stat">
+    <span class="stat-num">24/7</span>
+    <span class="stat-label">Доступность сервиса</span>
+  </div>
+  <div class="stat">
+    <span class="stat-num">0 ₽</span>
+    <span class="stat-label">Плата за скачивание</span>
+  </div>
+</div>
+
+<!-- SEARCH -->
+<div class="search-wrap" id="search">
+  <div class="search-box">
+    <input class="search-input" type="text" placeholder="Поиск приложений: ВКонтакте, Сбербанк, Госуслуги…" />
+    <button class="search-btn">Найти</button>
+  </div>
+  <div class="search-tags">
+    <span class="search-tag">Госуслуги</span>
+    <span class="search-tag">СберБанк</span>
+    <span class="search-tag">ВКонтакте</span>
+    <span class="search-tag">Яндекс Карты</span>
+    <span class="search-tag">Ozon</span>
+    <span class="search-tag">Wildberries</span>
+    <span class="search-tag">Тинькофф</span>
+    <span class="search-tag">2ГИС</span>
+  </div>
+</div>
+
+<!-- CATEGORIES -->
+<section class="section" id="categories">
+  <div class="section-header">
+    <span class="section-tag">Разделы</span>
+    <h2>Категории приложений</h2>
+    <p>Найдите нужное приложение в одном из разделов нашего каталога.</p>
+  </div>
+  <div class="categories-grid">
+    <a href="#" class="cat-card">
+      <span class="cat-icon">🏛️</span>
+      <div class="cat-name">Госсервисы</div>
+      <div class="cat-count">28 приложений</div>
+    </a>
+    <a href="#" class="cat-card">
+      <span class="cat-icon">🏦</span>
+      <div class="cat-name">Банки и финансы</div>
+      <div class="cat-count">42 приложения</div>
+    </a>
+    <a href="#" class="cat-card">
+      <span class="cat-icon">🗺️</span>
+      <div class="cat-name">Карты и навигация</div>
+      <div class="cat-count">15 приложений</div>
+    </a>
+    <a href="#" class="cat-card">
+      <span class="cat-icon">💬</span>
+      <div class="cat-name">Мессенджеры</div>
+      <div class="cat-count">19 приложений</div>
+    </a>
+    <a href="#" class="cat-card">
+      <span class="cat-icon">🛒</span>
+      <div class="cat-name">Маркетплейсы</div>
+      <div class="cat-count">31 приложение</div>
+    </a>
+    <a href="#" class="cat-card">
+      <span class="cat-icon">📺</span>
+      <div class="cat-name">Стриминг и ТВ</div>
+      <div class="cat-count">24 приложения</div>
+    </a>
+    <a href="#" class="cat-card">
+      <span class="cat-icon">🚖</span>
+      <div class="cat-name">Транспорт и такси</div>
+      <div class="cat-count">16 приложений</div>
+    </a>
+    <a href="#" class="cat-card">
+      <span class="cat-icon">🎮</span>
+      <div class="cat-name">Игры</div>
+      <div class="cat-count">58 приложений</div>
+    </a>
+    <a href="#" class="cat-card">
+      <span class="cat-icon">🍕</span>
+      <div class="cat-name">Еда и доставка</div>
+      <div class="cat-count">21 приложение</div>
+    </a>
+    <a href="#" class="cat-card">
+      <span class="cat-icon">📰</span>
+      <div class="cat-name">Новости и медиа</div>
+      <div class="cat-count">33 приложения</div>
+    </a>
+  </div>
+</section>
+
+<!-- CATALOG -->
+<section class="section" id="catalog" style="background: var(--surface); border-top: 1px solid var(--border);">
+  <div class="section-header">
+    <span class="section-tag">Популярное</span>
+    <h2>Топ приложений</h2>
+    <p>Самые скачиваемые российские приложения прямо сейчас.</p>
+  </div>
+  <div class="apps-grid">
+
+    <div class="app-card">
+      <div class="app-header">
+        <div class="app-icon" style="background: linear-gradient(135deg,#0052CC,#2684FF);">🏛️</div>
+        <div class="app-meta">
+          <div class="app-name">Госуслуги</div>
+          <div class="app-developer">Минцифры России</div>
+        </div>
+        <span class="app-badge">ТОП</span>
+      </div>
+      <div class="app-desc">Единый портал государственных услуг: паспорт, записи к врачу, штрафы, налоги и сотни других сервисов.</div>
+      <div class="app-footer">
+        <div class="app-rating">⭐ 4.7 · Бесплатно</div>
+        <a href="#" class="btn-download">⬇ Скачать</a>
+      </div>
+    </div>
+
+    <div class="app-card">
+      <div class="app-header">
+        <div class="app-icon" style="background: linear-gradient(135deg,#1DB84E,#0A7F32);">💳</div>
+        <div class="app-meta">
+          <div class="app-name">СберБанк Онлайн</div>
+          <div class="app-developer">ПАО Сбербанк</div>
+        </div>
+      </div>
+      <div class="app-desc">Управляйте счетами, платите по QR, переводите деньги и пользуйтесь бонусами СберСпасибо.</div>
+      <div class="app-footer">
+        <div class="app-rating">⭐ 4.8 · Бесплатно</div>
+        <a href="#" class="btn-download">⬇ Скачать</a>
+      </div>
+    </div>
+
+    <div class="app-card">
+      <div class="app-header">
+        <div class="app-icon" style="background: linear-gradient(135deg,#0077FF,#005AC4);">💙</div>
+        <div class="app-meta">
+          <div class="app-name">ВКонтакте</div>
+          <div class="app-developer">VK Group</div>
+        </div>
+        <span class="app-badge">ТОП</span>
+      </div>
+      <div class="app-desc">Крупнейшая российская социальная сеть: общение, музыка, видео, новостная лента и сообщества.</div>
+      <div class="app-footer">
+        <div class="app-rating">⭐ 4.6 · Бесплатно</div>
+        <a href="#" class="btn-download">⬇ Скачать</a>
+      </div>
+    </div>
+
+    <div class="app-card">
+      <div class="app-header">
+        <div class="app-icon" style="background: linear-gradient(135deg,#FF6600,#CC4400);">🗺️</div>
+        <div class="app-meta">
+          <div class="app-name">Яндекс Карты</div>
+          <div class="app-developer">Яндекс</div>
+        </div>
+      </div>
+      <div class="app-desc">Навигация с пробками, панорамы улиц, организации, маршруты и offline-карты для России и СНГ.</div>
+      <div class="app-footer">
+        <div class="app-rating">⭐ 4.8 · Бесплатно</div>
+        <a href="#" class="btn-download">⬇ Скачать</a>
+      </div>
+    </div>
+
+    <div class="app-card">
+      <div class="app-header">
+        <div class="app-icon" style="background: linear-gradient(135deg,#FF4F4F,#B80000);">🛒</div>
+        <div class="app-meta">
+          <div class="app-name">Wildberries</div>
+          <div class="app-developer">Wildberries LLC</div>
+        </div>
+      </div>
+      <div class="app-desc">Маркетплейс №1 в России: миллионы товаров, быстрая доставка, возвраты и программа лояльности.</div>
+      <div class="app-footer">
+        <div class="app-rating">⭐ 4.5 · Бесплатно</div>
+        <a href="#" class="btn-download">⬇ Скачать</a>
+      </div>
+    </div>
+
+    <div class="app-card">
+      <div class="app-header">
+        <div class="app-icon" style="background: linear-gradient(135deg,#005BFF,#0038A0);">💙</div>
+        <div class="app-meta">
+          <div class="app-name">Т-Банк</div>
+          <div class="app-developer">АО Т-Банк (Тинькофф)</div>
+        </div>
+        <span class="app-badge">NEW</span>
+      </div>
+      <div class="app-desc">Мобильный банк с кэшбэком, инвестициями, рассрочкой и бесплатным обслуживанием дебетовой карты.</div>
+      <div class="app-footer">
+        <div class="app-rating">⭐ 4.9 · Бесплатно</div>
+        <a href="#" class="btn-download">⬇ Скачать</a>
+      </div>
+    </div>
+
+  </div>
+</section>
+
+<!-- PLATFORMS -->
+<section id="platforms" class="platforms">
+  <div class="section" style="border-bottom: 1px solid var(--border); padding-bottom: 0;">
+    <div class="section-header" style="margin-bottom: 0;">
+      <span class="section-tag">Устройства</span>
+      <h2>Скачать на любое устройство</h2>
+    </div>
+  </div>
+  <div class="platforms-inner">
+    <div class="platform-block">
+      <span class="platform-icon">🤖</span>
+      <div class="platform-name">Android (APK)</div>
+      <p class="platform-desc">Прямые ссылки на APK-файлы — устанавливайте российские приложения даже без Google Play. Безопасно и актуально.</p>
+      <a href="#" class="platform-btn">📥 Каталог для Android</a>
+    </div>
+    <div class="platform-block">
+      <span class="platform-icon">🍎</span>
+      <div class="platform-name">iOS / iPhone</div>
+      <p class="platform-desc">Инструкции по установке приложений через альтернативные методы, TestFlight и региональные App Store.</p>
+      <a href="#" class="platform-btn">📥 Каталог для iPhone</a>
+    </div>
+  </div>
+</section>
+
+<!-- FEATURES -->
+<section class="section" id="about">
+  <div class="section-header">
+    <span class="section-tag">Почему RU-Apps</span>
+    <h2>Надёжно, быстро, бесплатно</h2>
+    <p>Мы собрали всё, что нужно для комфортного использования российских приложений.</p>
+  </div>
+  <div class="features-grid">
+    <div class="feature">
+      <div class="feature-icon">🔒</div>
+      <h3>Безопасные файлы</h3>
+      <p>Все APK проверяются перед публикацией. Мы следим за целостностью файлов и обновляем версии по мере выхода официальных релизов.</p>
+    </div>
+    <div class="feature">
+      <div class="feature-icon">⚡</div>
+      <h3>Быстрая загрузка</h3>
+      <p>Серверы расположены в России. Скорость скачивания не зависит от международных ограничений или зарубежных CDN.</p>
+    </div>
+    <div class="feature">
+      <div class="feature-icon">🔄</div>
+      <h3>Актуальные версии</h3>
+      <p>Мониторим обновления и публикуем новые версии приложений в течение 24 часов после официального выпуска разработчиками.</p>
+    </div>
+    <div class="feature">
+      <div class="feature-icon">📖</div>
+      <h3>Инструкции по установке</h3>
+      <p>Пошаговые руководства для Android и iOS: как разрешить установку из сторонних источников, использовать TestFlight и альтернативные магазины.</p>
+    </div>
+    <div class="feature">
+      <div class="feature-icon">🇷🇺</div>
+      <h3>Только российские приложения</h3>
+      <p>Каталог включает только отечественные сервисы и приложения для использования на территории России и СНГ.</p>
+    </div>
+    <div class="feature">
+      <div class="feature-icon">💬</div>
+      <h3>Поддержка пользователей</h3>
+      <p>Не можете установить приложение? Наша команда отвечает на вопросы через Telegram и электронную почту.</p>
+    </div>
+  </div>
+</section>
+
+<!-- FOOTER -->
+<footer>
+  <div class="footer-top">
+    <div class="footer-brand">
+      <a href="#" class="logo">
+        <div class="logo-icon">RU</div>
+        <span class="logo-text">ru<span>-</span>apps</span>
+      </a>
+      <p>Российский каталог мобильных приложений для Android и iOS. Скачивайте без ограничений.</p>
+    </div>
+    <div class="footer-col">
+      <h4>Каталог</h4>
+      <ul>
+        <li><a href="#">Госсервисы</a></li>
+        <li><a href="#">Банки</a></li>
+        <li><a href="#">Карты</a></li>
+        <li><a href="#">Мессенджеры</a></li>
+        <li><a href="#">Маркетплейсы</a></li>
+      </ul>
+    </div>
+    <div class="footer-col">
+      <h4>Платформы</h4>
+      <ul>
+        <li><a href="#">Android APK</a></li>
+        <li><a href="#">iOS / iPhone</a></li>
+        <li><a href="#">Инструкции</a></li>
+        <li><a href="#">Обновления</a></li>
+      </ul>
+    </div>
+    <div class="footer-col">
+      <h4>О нас</h4>
+      <ul>
+        <li><a href="#">О проекте</a></li>
+        <li><a href="#">Добавить приложение</a></li>
+        <li><a href="#">Контакты</a></li>
+        <li><a href="#">Политика конфиденциальности</a></li>
+      </ul>
+    </div>
+  </div>
+  <div class="footer-bottom">
+    <p>© 2025 ru-apps.ru — Все права защищены</p>
+    <div class="russia-flag" title="Сделано в России">
+      <div class="flag-stripe" style="background:#fff; border:1px solid rgba(255,255,255,0.1);"></div>
+      <div class="flag-stripe" style="background:#0039A6;"></div>
+      <div class="flag-stripe" style="background:#D52B1E;"></div>
+    </div>
+  </div>
+</footer>
+
+<script>
+  // Search tag click
+  document.querySelectorAll('.search-tag').forEach(tag => {
+    tag.addEventListener('click', () => {
+      document.querySelector('.search-input').value = tag.textContent;
+      document.querySelector('.search-input').focus();
+    });
+  });
+
+  // Fade-in on scroll
+  const observer = new IntersectionObserver(entries => {
+    entries.forEach(e => {
+      if (e.isIntersecting) {
+        e.target.style.opacity = '1';
+        e.target.style.transform = 'translateY(0)';
+      }
+    });
+  }, { threshold: 0.1 });
+
+  document.querySelectorAll('.app-card, .cat-card, .feature').forEach(el => {
+    el.style.opacity = '0';
+    el.style.transform = 'translateY(20px)';
+    el.style.transition = 'opacity 0.5s ease, transform 0.5s ease';
+    observer.observe(el);
+  });
+</script>
+</body>
+</html>
